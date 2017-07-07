@@ -1,12 +1,12 @@
 import QtQuick 2.5
 
 Rectangle {
-    id:recMain
+    id: root
     width: 1200; height: 900
-    color:"#fff"
+    //color:"#fff"
 
     Image {
-            x: recGreen.width/2-width/2; y: 10
+            x: blackLine.width/2-width/2; y: 10
             width: 250
             height: 63
             source: "abfe7.png"
@@ -15,7 +15,7 @@ Rectangle {
         }
 
     Rectangle {
-        id:recGreen
+        id:blackLine
         width: parent.parent.width*15/16; height: (parent.parent.height*15/16)-50
         color:"#fff"
         radius: 7
@@ -23,8 +23,6 @@ Rectangle {
         border.width: 2
         x: (parent.parent.width-width)/2
         y: 80
-
-
 
         Rectangle {
             id: buttonClick
