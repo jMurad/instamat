@@ -6,7 +6,7 @@ Rectangle {
     color:"#fff"
 
     Image {
-            x: parent.width/2-width/2; y: 10
+            x: recGreen.width/2-width/2; y: 10
             width: 250
             height: 63
             source: "abfe7.png"
