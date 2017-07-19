@@ -45,8 +45,9 @@ if __name__ == '__main__':
     app.exec_()
     sys.exit()
     '''
+
     # создаём экземпляр приложения
-    app = QApplication(sys.argv)
+    app = QGuiApplication(sys.argv)
     # создаём QML движок
     engine = QQmlApplicationEngine()
     # создаём объект калькулятора

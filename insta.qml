@@ -1,9 +1,17 @@
 import QtQuick 2.5
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.2
 
-Rectangle {
+ApplicationWindow {
+    visible: true
+    width: 640
+    height: 240
+    title: qsTr("PyQt5 love QML")
+    //color: "whitesmoke"
+
     id: root
-    width: 1200; height: 900
-    //color:"#fff"
+    //width: 1200; height: 900
+    color:"white"
 
     Image {
             x: blackLine.width/2-width/2; y: 10
@@ -115,6 +123,22 @@ Rectangle {
             onClicked: {
                 theModel.append({"number": ++blackLine.count});
             }
+        }
+    }
+
+    Connections {
+        target: calculator
+
+        // Обработчик сигнала сложения
+        onSumResult: {
+            // sum было задано через arguments=['sum']
+            sumResult.text = sum
+        }
+
+        // Обработчик сигнала вычитания
+        onSubResult: {
+            // sub было задано через arguments=['sub']
+            subResult.text = sub
         }
     }
 }
