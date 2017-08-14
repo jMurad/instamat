@@ -1,108 +1,147 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Styles 1.4
 
 ApplicationWindow {
-    visible: true
-    width: 640
-    height: 240
-    title: qsTr("PyQt5 love QML")
-    //color: "whitesmoke"
-
     id: root
-    //width: 1200; height: 900
-    color:"white"
 
+    visible: true
+    title: qsTr("PyQt5 love QML")
+    width: 1200
+    height: 900
+    style: ApplicationWindowStyle {
+        background: Rectangle {
+            color: "#FFFFFF"
+        }
+    }
+
+    //Logo:::::::::::::::::::::::::::::::::::::::::
     Image {
-            x: blackLine.width/2-width/2; y: 10
-            width: 250
-            height: 63
-            source: "abfe7.png"
-            fillMode: Image.PreserveAspectCrop
-            clip: true
-        }
+        x: blackLine.width/2-width/2; y: 10
+        width: 250
+        height: 63
+        //source: "abfe7.png"
+        fillMode: Image.PreserveAspectCrop
+        clip: true
+    }
 
-    Rectangle {
+    //Horizontal scroll
+    ListView {
+        id: lview
 
-        id:blackLine
-        width: parent.parent.width*15/16; height: (parent.parent.height)-150
-        color:"#fff"
-        radius: 7
-        border.color: "#000000"
-        border.width: 2
-        x: (parent.parent.width-width)/2
-        y: 80
-        property variant colorArray: ["#00bde3", "#67c111", "#ea7025"]
-        property int count: 9
+        Layout.alignment: Qt.AlignCenter
+        Layout.minimumWidth: root.width - 50
+        Layout.preferredHeight: root.height - 50
 
-        ListModel {
-            id: theModel
-            ListElement { number: 0 }
-            ListElement { number: 1 }
-            ListElement { number: 2 }
-            ListElement { number: 3 }
-            ListElement { number: 4 }
-            ListElement { number: 5 }
-            ListElement { number: 6 }
-            ListElement { number: 7 }
-            ListElement { number: 8 }
-            ListElement { number: 9 }
-        }
+        anchors.fill: parent
+        anchors.margins: 10
+        orientation: ListView.Horizontal
+        layoutDirection: Qt.LeftToRight
+        clip: true
+        interactive: true
+        spacing: 200
 
-        GridView  {
-            id: view
-            anchors.fill:  parent
-            anchors.margins:  20
+        //Model from 5 elements
+        model: 5
 
-            clip:  true
+        delegate: Item {
 
-            model:  theModel
-            property variant side: (blackLine.width-2*view.anchors.margins)/4
-            cellWidth:  side
-            cellHeight:  side
+            width: root.width - 100
+            height: root.height - 100
 
-            delegate:  numberDelegate
-        }
+            //Rectangle with black line
+            Rectangle {
+                id:blackLine
 
-        Component  {
-            id: numberDelegate
+                width: root.width*15/16; height: (root.height)-150
+                color:"#fff"
+                radius: 7
+                border.color: "#000000"
+                border.width: 2
+                x: (parent.parent.width-width)/2
+                y: 80
+                property int count: 9
 
-            Rectangle  {
-                id: greenBox
+                //Model for GridView
+                ListModel {
+                    id: theModel
 
-                width: view.side-1
-                height: view.side-1
-                color: "#f04"
-                border.width: 1
-                Text {
-                    text: index
-                    anchors.centerIn: parent
-                    font.pointSize: 10; font.bold: true
+                    ListElement { number: 0 }
+                    ListElement { number: 1 }
+                    ListElement { number: 2 }
+                    ListElement { number: 3 }
+                    ListElement { number: 4 }
+                    ListElement { number: 5 }
+                    ListElement { number: 6 }
                 }
 
-                MouseArea {
-                    anchors.fill: parent
+                //Grid for viewing images
+                GridView  {
+                    id: view
 
-                    onClicked: {
-                        theModel.remove(index);
+                    anchors.fill:  parent
+                    anchors.margins:  20
+                    clip:  true
+                    model:  theModel
+                    property variant side: (blackLine.width-2*view.anchors.margins)/4
+                    cellWidth:  side
+                    cellHeight:  side
+
+                    delegate:  Item  {
+
+                        width: 500
+                        height: 300
+
+                        //Rectangles for images
+                        Rectangle  {
+                            id: greenBox
+
+                            width: view.side-1
+                            height: view.side-1
+                            color: "#f04"
+                            border.width: 1
+
+                            Text {
+                                text: index
+                                anchors.centerIn: parent
+                                font.pointSize: 10; font.bold: true
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+
+                                onClicked: {
+                                    theModel.remove(index);
+                                }
+                            }
+
+                            GridView.onRemove: SequentialAnimation {
+                                PropertyAction { target: greenBox; property: "GridView.delayRemove"; value: true }
+                                NumberAnimation { target: greenBox; property: "scale"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
+                                PropertyAction { target: greenBox; property: "GridView.delayRemove"; value: false }
+                            }
+
+                            GridView.onAdd: SequentialAnimation {
+                                NumberAnimation { target: greenBox; property: "scale"; from: 0; to: 1; duration: 250; easing.type: Easing.InOutQuad }
+                            }
+                        }
                     }
                 }
 
-                GridView.onRemove: SequentialAnimation {
-                    PropertyAction { target: greenBox; property: "GridView.delayRemove"; value: true }
-                    NumberAnimation { target: greenBox; property: "scale"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
-                    PropertyAction { target: greenBox; property: "GridView.delayRemove"; value: false }
-                }
 
-                GridView.onAdd: SequentialAnimation {
-                    NumberAnimation { target: greenBox; property: "scale"; from: 0; to: 1; duration: 250; easing.type: Easing.InOutQuad }
-                }
             }
         }
+
+        preferredHighlightBegin: width - 10
+        preferredHighlightEnd: 10
+        highlightRangeMode: ListView.StrictlyEnforceRange
+        Component.onCompleted: currentIndex = count / 2
     }
 
     Rectangle {
         id: buttonClick
+
         width: 130; height: 35
         x: parent.parent.width/2-width/2
         y: (parent.parent.height)-50
@@ -112,6 +151,7 @@ ApplicationWindow {
 
         Text {
             id: btnText
+
             text: "Загрузить еще..."
             anchors.centerIn: parent
             font.pointSize: 10; font.bold: true
@@ -119,9 +159,9 @@ ApplicationWindow {
 
         MouseArea {
             anchors.fill: parent
-
             onClicked: {
-                theModel.append({"number": ++blackLine.count});
+                //theModel.append({"number": ++blackLine.count});
+                btnText.text = lview.visibleArea.xPosition
             }
         }
     }

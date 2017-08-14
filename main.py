@@ -1,13 +1,7 @@
-import functions
 import sys
-from PyQt5.QtCore import QUrl
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtQuick import QQuickView
-
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
-
 
 class Calculator(QObject):
     def __init__(self):
@@ -34,17 +28,6 @@ class Calculator(QObject):
 
 
 if __name__ == '__main__':
-
-    '''
-    app = QApplication(sys.argv)
-    view = QQuickView()
-    view.setSource(QUrl('insta.qml'))
-    view.setResizeMode(QQuickView.SizeRootObjectToView)
-    view.setGeometry(100, 100, 1200, 900)
-    view.show()
-    app.exec_()
-    sys.exit()
-    '''
 
     # создаём экземпляр приложения
     app = QGuiApplication(sys.argv)
