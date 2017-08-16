@@ -21,7 +21,7 @@ ApplicationWindow {
         x: blackLine.width/2-width/2; y: 10
         width: 250
         height: 63
-        //source: "logo2.png"
+        //source: "logo5.png"
         fillMode: Image.PreserveAspectCrop
         clip: true
     }
