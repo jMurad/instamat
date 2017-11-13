@@ -1,10 +1,7 @@
 import json
 import re
 import requests
-
-from BackEnd.endpoints import url_inst, url_auth, url_search_tag, url_search_pro, url_next_search_tag, \
-    url_next_search_pro, username, password
-
+from BackEnd.endpoints import *
 
 class Instagram:
     CMSD = ['','','','']
