@@ -24,7 +24,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: left_link.height
             width: height
-            source: "\\FrontEnd\\back.svg"
+            source: "back.svg"
             mipmap: true
         }
 
@@ -45,7 +45,6 @@ Rectangle {
 
                 onEntered: {
                     parent.font.pixelSize = 16
-
                 }
 
                 onExited: {
@@ -66,7 +65,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: center_link .height
             width: height
-            source: "\\FrontEnd\\lupa.svg"
+            source: "loop.svg"
             mipmap: true
         }
 
@@ -85,7 +84,7 @@ Rectangle {
 
                 onEntered: {
                     parent.font.pixelSize = 16
-
+                    background.item
                 }
 
                 onExited: {
@@ -101,6 +100,7 @@ Rectangle {
      }
 
     Rectangle{
+        id: body
 
         width: parent.width*95/100
         anchors.top: bar.bottom
@@ -110,31 +110,40 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         border.width: 0
 
-        //Model for GridView
+        property int counter: 0
 
+        Component.onCompleted: {
+            timer1.running = true
+            body.counter = body.counter + 1
+            kk1.text = body.counter
+        }   //Повторный поиск настроить завтра
+
+        Timer {
+            id: timer1
+
+            interval: 1000; running: false; repeat: true
+            onTriggered: {
+                var data = root.qResultFind;
+                if (data.indexOf("{") != -1 ){
+                    timer1.running = false
+
+                    root.qResultFind = ""
+                    var jsdata = JSON.parse(data)
+                    for (var i = 0; i < jsdata.length; i++) {
+                        theModel.append( { "qurl": jsdata[i].qurl } );
+                    }
+                }
+            }
+        }
+
+        Text {
+            id: kk1
+            text: "No"
+        }
+
+        //Model for GridView
         ListModel {
             id: theModel
-
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606870.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606871.jpg" }
-            ListElement { _url: "\\FrontEnd\\pic\\606872.jpg" }
         }
 
         //Grid for viewing images
@@ -174,7 +183,7 @@ Rectangle {
                         id: pic
 
                         anchors.fill: parent
-                        source: _url
+                        source: qurl
                     }
 
 

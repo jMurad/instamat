@@ -6,4 +6,4 @@ url_search_pro = 'https://www.instagram.com/{0}/?__a=1'
 url_next_search_pro = 'https://www.instagram.com/graphql/query/?query_id=17859156310193001&id={0}&first={1}&after={2}'
 
 username = 'testprofinsta'
-password = 'I3244dmk'
+password = 'T3244dmk'

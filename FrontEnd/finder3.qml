@@ -24,7 +24,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: left_link.height
             width: height
-            source: "\\FrontEnd\\back.svg"
+            source: "back.svg"
             mipmap: true
         }
 
@@ -66,7 +66,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: center_link .height
             width: height
-            source: "\\FrontEnd\\lupa.svg"
+            source: "loop.svg"
             mipmap: true
         }
 
@@ -117,7 +117,7 @@ Rectangle {
 
             fillMode: Image.PreserveAspectFit
             height: parent.height-20
-            source: "\\FrontEnd\\pic\\606870.jpg"
+            source: "pic/606870.jpg"
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
@@ -170,7 +170,7 @@ nike.com/fcb www.tubarcelona.com
 
             fillMode: Image.PreserveAspectCrop
             height: parent.height-20
-            source: "\\FrontEnd\\pic\\606870.jpg"
+            source: "pic/606870.jpg"
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
@@ -318,7 +318,7 @@ nike.com/fcb www.tubarcelona.com
                 anchors.fill: parent
                 onClicked: {
                     //photoCard.height = 700
-                    hide_photoCard.grabToImage(function(result) {result.saveToFile("\\FrontEnd\\something.png");});
+                    hide_photoCard.grabToImage(function(result) {result.saveToFile("something.png");});
                 }
             }
         }

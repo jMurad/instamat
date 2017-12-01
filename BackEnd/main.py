@@ -1,42 +1,48 @@
 import sys
 from BackEnd.functions import *
+from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtQuick import QQuickView
-from PyQt5.QtCore import QUrl
 
-class Calculator(QObject):
+class Instamat(QObject):
     def __init__(self):
         QObject.__init__(self)
+        self.session = requests.Session()
+        self.insta = Instagram(self.session)
+        self.insta.auth_insta()
+        self.find_str = ""
 
-    # cигнал передающий сумму
-    # обязательно даём название аргументу через arguments=['sum']
-    # иначе нельзя будет его забрать в QML
-    sumResult = pyqtSignal(int, arguments=['sum'])
 
-    subResult = pyqtSignal(int, arguments=['sub'])
+    resultFind = pyqtSignal(str, arguments=['resultFind'])
+    nextResultFind = pyqtSignal(str, arguments=['nextResultFind'])
 
-    # слот для суммирования двух чисел
-    @pyqtSlot(int, int)
-    def sum(self, arg1, arg2):
-        # складываем два аргумента и испускаем сигнал
-        self.sumResult.emit(arg1 + arg2)
+    @pyqtSlot(str)
+    def firstFind(self, arg1):
+        self.find_str = arg1
+        if arg1[0] == "#":
+            result = self.insta.search_tag(arg1[1:])
+        else:
+            result = self.insta.search_pro(arg1[1:])
+        self.resultFind.emit(result)
+        print(result)
 
-    # слот для вычитания двух чисел
-    @pyqtSlot(int, int)
-    def sub(self, arg1, arg2):
-        # вычитаем аргументы и испускаем сигнал
-        self.subResult.emit(arg1 - arg2)
-
+    @pyqtSlot()
+    def nextFind(self):
+        if self.find_str == "#":
+            result = self.insta.next_search_tag(self.find_str[1:])
+        else:
+            result = self.insta.next_search_pro(self.find_str[1:])
+        self.nextResultFind.emit(result)
 
 if __name__ == '__main__':
 
-    app = QApplication(sys.argv)
-    # Объект QQuickView, в который грузится UI для отображения
-    view = QQuickView()
-    view.setSource(QUrl('\\FrontEnd\\newTest.qml'))
-    #view.show()
-    app.exec_()
-    sys.exit()
+    app = QGuiApplication(sys.argv)
+    engine = QQmlApplicationEngine()
+
+    instamat = Instamat()
+    engine.rootContext().setContextProperty("instamat", instamat)
+
+    engine.load(QUrl("FrontEnd/main.qml"))
+    engine.quit.connect(app.quit)
+    sys.exit(app.exec_())

@@ -75,6 +75,8 @@ Rectangle{
                             border.width: 1
                             color: clr
 
+                            signal item2Clicked()
+
                             Image {
                                 id: backImg
                                 anchors.top: parent.top
@@ -137,8 +139,11 @@ Rectangle{
                                             if(name == "(c)")
                                                 intxt.text = ""
                                             else
-                                                if(named == "next")
+                                                if(named == "next") {
+                                                    instamat.firstFind(intxt.text)
                                                     lview.currentIndex = 1
+                                                    parent.parent.item2Clicked()
+                                                }
                                 }
                             }
                         }
@@ -186,7 +191,7 @@ Rectangle{
                 ListElement { name: "B"; w: 1; h: 1},
                 ListElement { name: "N"; w: 1; h: 1},
                 ListElement { name: "M"; w: 1; h: 1},
-                ListElement { named: "next"; imag: "\\FrontEnd\\search.png"; clr: "#FFFFEE"; w: 1.25; h: 0.8}
+                ListElement { named: "next"; imag: "search.png"; clr: "#FFFFEE"; w: 1.25; h: 0.8}
             ]
         }
         ListElement {

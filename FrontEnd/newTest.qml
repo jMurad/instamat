@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
+
 ApplicationWindow {
     id: root
 
@@ -15,12 +16,15 @@ ApplicationWindow {
         }
     }
 
+    property string qResultFind: ""
+    property string qNextResultFind: ""
+
     //Логотип
     Image {
         x: root.width/2-width/2; y: 20
         width: 250
         height: 63
-        source: "\\FrontEnd\\logo.png"
+        source: "logo.png"
         fillMode: Image.PreserveAspectCrop
         clip: true
     }
@@ -57,9 +61,9 @@ ApplicationWindow {
             }
 
             model: ListModel {
-                ListElement { sourceName: "\\FrontEnd\\finder.qml"; }
-                ListElement { sourceName: "\\FrontEnd\\finder2.qml"; }
-                ListElement { sourceName: "\\FrontEnd\\finder3.qml"; }
+                ListElement { sourceName: "finder.qml"; }
+                ListElement { sourceName: "finder2.qml"; }
+                ListElement { sourceName: "finder3.qml"; }
             }
 
             //Прямоугольник с черной рамкой
@@ -76,13 +80,25 @@ ApplicationWindow {
                 border.width: 2
 
                 Loader {
-                    id: background
+                    id: background.item
                     anchors.fill: parent
 
                     //anchors.centerIn: blackLine
                     source: sourceName
                 }
             }
+        }
+    }
+
+     Connections {
+        target: instamat
+
+        onResultFind: {
+            root.qResultFind = resultFind
+        }
+
+        onNextResultFind: {
+            root.qNextResultFind = nextResultFind
         }
     }
 }

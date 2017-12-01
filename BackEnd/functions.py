@@ -172,4 +172,25 @@ class Instagram:
             else:
                 return json_str
         str_r = {'count': count, 'nodes': str_res}
-        return json.loads(json.dumps(str_r))
+        #json_result = json.loads(json.dumps(str_r))
+        return self.imgForQml(str_r)
+
+    #QML lite
+    def imgForQml(self, json_str):
+        nodes = []
+        for item in json_str['nodes']:
+            buf = {}
+            buf['qurl'] = item['display_src']
+            nodes.append(buf)
+        #return json.loads(json.dumps(nodes)) #.replace(u'<', u'\\u003c').replace(u'>', u'\\u003e').replace(u'&', u'\\u0026').replace(u"'", u'\\u0027')
+
+        return json.dumps(nodes)
+
+if __name__ == '__main__':
+    session = requests.Session()
+    insta = Instagram(session)
+    insta.auth_insta()
+    str = insta.search_pro("jmlmurad")
+    str2 = insta.next_search_pro("jmlmurad")
+    print(str)
+    print(str2)

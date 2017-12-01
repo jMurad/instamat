@@ -62,7 +62,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             height: center_link .height
             width: height
-            source: "\\FrontEnd\\lupa.svg"
+            source: "\\FrontEnd\\loop.svg"
             mipmap: true
         }
 
