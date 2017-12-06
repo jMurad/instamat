@@ -6,6 +6,8 @@ Rectangle{
     anchors.fill: parent
     anchors.margins: 10
 
+    signal nextFrame()
+
     Rectangle {
         id: labelText
 
@@ -75,8 +77,6 @@ Rectangle{
                             border.width: 1
                             color: clr
 
-                            signal item2Clicked()
-
                             Image {
                                 id: backImg
                                 anchors.top: parent.top
@@ -140,9 +140,9 @@ Rectangle{
                                                 intxt.text = ""
                                             else
                                                 if(named == "next") {
-                                                    instamat.firstFind(intxt.text)
+                                                    instamat.first_find(intxt.text)
+                                                    rootModel.append({"sourceName": "finder2.qml"})
                                                     lview.currentIndex = 1
-                                                    parent.parent.item2Clicked()
                                                 }
                                 }
                             }

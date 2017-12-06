@@ -30,6 +30,8 @@ ApplicationWindow {
     }
 
     Rectangle {
+        id: rooted
+
         anchors.fill: parent
         anchors.leftMargin: 0
         anchors.rightMargin: 0
@@ -61,9 +63,11 @@ ApplicationWindow {
             }
 
             model: ListModel {
-                ListElement { sourceName: "finder.qml"; }
-                ListElement { sourceName: "finder2.qml"; }
-                ListElement { sourceName: "finder3.qml"; }
+                id: rootModel
+
+                ListElement {sourceName: "finder.qml"}
+                //ListElement {sourceName: "finder2.qml"}
+                //ListElement {sourceName: "finder3.qml"}
             }
 
             //Прямоугольник с черной рамкой
@@ -80,7 +84,7 @@ ApplicationWindow {
                 border.width: 2
 
                 Loader {
-                    id: background.item
+                    id: framer
                     anchors.fill: parent
 
                     //anchors.centerIn: blackLine

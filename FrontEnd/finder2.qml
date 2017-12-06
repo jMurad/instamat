@@ -115,7 +115,6 @@ Rectangle {
         Component.onCompleted: {
             timer1.running = true
             body.counter = body.counter + 1
-            kk1.text = body.counter
         }   //Повторный поиск настроить завтра
 
         Timer {
@@ -130,15 +129,10 @@ Rectangle {
                     root.qResultFind = ""
                     var jsdata = JSON.parse(data)
                     for (var i = 0; i < jsdata.length; i++) {
-                        theModel.append( { "qurl": jsdata[i].qurl } );
+                        theModel.append( { "thumb": jsdata[i].thumb } );
                     }
                 }
             }
-        }
-
-        Text {
-            id: kk1
-            text: "No"
         }
 
         //Model for GridView
@@ -169,23 +163,15 @@ Rectangle {
                     height: parent.height-8
                     anchors.centerIn: parent
 
-                    color: "green"
-                    border.width: 1
-
-                    Text {
-                        text: index
-                        anchors.centerIn: parent
-                        font.pointSize: 10;
-                        font.bold: true
-                    }
+                    color: "white"
+                    //border.width: 1
 
                     Image {
                         id: pic
 
                         anchors.fill: parent
-                        source: qurl
+                        source: thumb
                     }
-
 
                     MouseArea {
                         anchors.fill: parent
@@ -208,7 +194,7 @@ Rectangle {
                             easing.type: Easing.InOutQuad
                         }
                     }
-                    /*
+
                     GridView.onRemove: SequentialAnimation {
                         PropertyAction {
                             target: greenBox;
@@ -239,7 +225,6 @@ Rectangle {
                             easing.type: Easing.InOutQuad
                         }
                     }
-                    */
                 }
             }
         }

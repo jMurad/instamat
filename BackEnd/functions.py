@@ -3,8 +3,9 @@ import re
 import requests
 from BackEnd.endpoints import *
 
+
 class Instagram:
-    CMSD = ['','','','']
+    CMSD = ['', '', '', '']
     end_cursor = ''
     has_next_page = True
     session = None
@@ -15,7 +16,7 @@ class Instagram:
         self.session = sess
 
     # Парсинг значений cookie----------------------|
-    def __parseCookieCMSD(self, page):
+    def __parse_cookie_cmsd(self, page):
         result = [re.search('csrftoken=(.*?);', str(page.headers)),
                   re.search('mid=(.*?);', str(page.headers)),
                   re.search('sessionid=(.*?);', str(page.headers)),
@@ -29,20 +30,20 @@ class Instagram:
 
     # Авторизация----------------------------------|
     def auth_insta(self):
-        self.__parseCookieCMSD(requests.get(url_inst))
-        payload = ("username=%s&password=%s") % (username, password)
-        headers = {'content-type':'application/x-www-form-urlencoded',
-                   'cookie':'mid={0}; '
-                            'ig_mcf_shown=1655622802190; '
-                            'ig_vw=1920; '
-                            'ig_pr=1; '
-                            'rur=ATN; '
-                            'csrftoken={1}'.format(self.CMSD[1], self.CMSD[0]),
+        self.__parse_cookie_cmsd(requests.get(url_inst))
+        payload = "username=%s&password=%s" % (username, password)
+        headers = {'content-type': 'application/x-www-form-urlencoded',
+                   'cookie': 'mid={0}; '
+                             'ig_mcf_shown=1655622802190;'
+                             'ig_vw=1920; '
+                             'ig_pr=1; '
+                             'rur=ATN; '
+                             'csrftoken={1}'.format(self.CMSD[1], self.CMSD[0]),
                    'referer': 'https://www.instagram.com/',
                    'x-csrftoken': '{0}'.format(self.CMSD[0]),
         }
         page = self.session.post(url_auth, data=payload, headers=headers, allow_redirects=False)
-        self.__parseCookieCMSD(page)
+        self.__parse_cookie_cmsd(page)
 
     # Начать поиск------------------------------------------------------------------------------------------------------
     def __search(self, search_str, url_req):
@@ -57,7 +58,7 @@ class Instagram:
                    'referer': 'https://www.instagram.com/',
                    }
         page = self.session.get(url_req.format(search_str), headers=headers, allow_redirects=False)
-        self.__parseCookieCMSD(page)
+        self.__parse_cookie_cmsd(page)
         json_data = json.loads(page.text)
         return json_data
 
@@ -66,7 +67,7 @@ class Instagram:
         json_data = self.__search(search_str, url_search_tag)
         self.end_cursor = json_data['tag']['media']['page_info']['end_cursor']
         self.has_next_page = json_data['tag']['media']['page_info']['has_next_page']
-        return self.imgGrabber(json_data)
+        return self.img_grabber(json_data)
 
     # Поиск по профилю-----------------------------|
     def search_pro(self, search_str):
@@ -74,7 +75,7 @@ class Instagram:
         self.userID = json_data['user']['id']
         self.end_cursor = json_data['user']['media']['page_info']['end_cursor']
         self.has_next_page = json_data['user']['media']['page_info']['has_next_page']
-        return self.imgGrabber(json_data)
+        return self.img_grabber(json_data)
 
     # Загрузить еще-----------------------------------------------------------------------------------------------------
     def __next_search(self, search_str, url_req, state):
@@ -98,7 +99,7 @@ class Instagram:
             json_data = self.__next_search(search_str, url_next_search_tag, False)
             self.end_cursor = json_data['data']['hashtag']['edge_hashtag_to_media']['page_info']['end_cursor']
             self.has_next_page = json_data['data']['hashtag']['edge_hashtag_to_media']['page_info']['has_next_page']
-            return self.imgGrabber(json_data)
+            return self.img_grabber(json_data)
         else:
             return {'None'}
 
@@ -108,89 +109,109 @@ class Instagram:
             json_data = self.__next_search(search_str, url_next_search_pro, True)
             self.end_cursor = json_data['data']['user']['edge_owner_to_timeline_media']['page_info']['end_cursor']
             self.has_next_page = json_data['data']['user']['edge_owner_to_timeline_media']['page_info']['has_next_page']
-            return self.imgGrabber(json_data)
+            return self.img_grabber(json_data)
         else:
             return {'None'}
 
     # Трансформировать instagram'овский json, в удобный для меня
-    def imgGrabber(self, json_str):
+    def img_grabber(self, json_str):
         count = 0
         str_res = []
         if 'tag' in json_str:
             for item in json_str['tag']['media']['nodes']:
                 if not item['is_video']:
-                    buf = {}
+                    # buf = {}
+                    buf = dict()
                     buf['date'] = item['date'] if 'date' in item else ''
                     buf['code'] = item['code'] if 'code' in item else ''
                     buf['caption'] = item['caption'] if 'caption' in item else ''
                     buf['display_src'] = item['display_src'] if 'display_src' in item else ''
                     buf['height'] = item['dimensions']['height'] if 'height' in item else ''
                     buf['width'] = item['dimensions']['width'] if 'width' in item else ''
+                    index = 0
+                    for itemThumb in item['thumbnail_resources']:
+                        buf['thumb' + str(index)] = itemThumb['src']
+                        index += 1
                     str_res.append(buf)
                     count += 1
         elif 'user' in json_str:
             for item in json_str['user']['media']['nodes']:
                 if not item['is_video']:
-                    buf = {}
+                    # buf = {}
+                    buf = dict()
                     buf['date'] = item['date'] if 'date' in item else ''
                     buf['code'] = item['code'] if 'code' in item else ''
                     buf['caption'] = item['caption'] if 'caption' in item else ''
                     buf['display_src'] = item['display_src'] if 'display_src' in item else ''
                     buf['height'] = item['dimensions']['height'] if 'height' in item else ''
                     buf['width'] = item['dimensions']['width'] if 'width' in item else ''
+                    index = 0
+                    for itemThumb in item['thumbnail_resources']:
+                        buf['thumb' + str(index)] = itemThumb['src']
+                        index += 1
                     str_res.append(buf)
                     count += 1
         elif 'data' in json_str:
             if 'hashtag' in json_str['data']:
                 for item in json_str['data']['hashtag']['edge_hashtag_to_media']['edges']:
                     if not item['node']['is_video']:
-                        buf = {}
-                        itemNode = item['node']
-                        itemText = item['node']['edge_media_to_caption']['edges']
-                        buf['date'] = itemNode['taken_at_timestamp'] if 'taken_at_timestamp' in itemNode else ''
-                        buf['code'] = itemNode['shortcode'] if 'shortcode' in itemNode else ''
-                        buf['caption'] = itemText['text'] if 'text' in itemText else ''
-                        buf['display_src'] = itemNode['display_url'] if 'display_url' in itemNode else ''
-                        buf['height'] = itemNode['dimensions']['height'] if 'height' in itemNode['dimensions'] else ''
-                        buf['width'] = itemNode['dimensions']['width'] if 'width' in itemNode['dimensions'] else ''
+                        # buf = {}
+                        buf = dict()
+                        item_node = item['node']
+                        item_text = item['node']['edge_media_to_caption']['edges']
+                        buf['date'] = item_node['taken_at_timestamp'] if 'taken_at_timestamp' in item_node else ''
+                        buf['code'] = item_node['shortcode'] if 'shortcode' in item_node else ''
+                        buf['caption'] = item_text['text'] if 'text' in item_text else ''
+                        buf['display_src'] = item_node['display_url'] if 'display_url' in item_node else ''
+                        buf['height'] = item_node['dimensions']['height'] if 'height' in item_node['dimensions'] else ''
+                        buf['width'] = item_node['dimensions']['width'] if 'width' in item_node['dimensions'] else ''
+                        index = 0
+                        for itemThumb in item_node['thumbnail_resources']:
+                            buf['thumb' + str(index)] = itemThumb['src']
+                            index += 1
                         str_res.append(buf)
                         count += 1
             elif 'user' in json_str['data']:
                 for item in json_str['data']['user']['edge_owner_to_timeline_media']['edges']:
                     if not item['node']['is_video']:
-                        buf = {}
-                        itemNode = item['node']
-                        itemText = item['node']['edge_media_to_caption']['edges']
-                        buf['date'] = itemNode['taken_at_timestamp'] if 'taken_at_timestamp' in itemNode else ''
-                        buf['code'] = itemNode['shortcode'] if 'shortcode' in itemNode else ''
-                        buf['caption'] = itemText['text'] if 'text' in itemText else ''
-                        buf['display_src'] = itemNode['display_url'] if 'display_url' in itemNode else ''
-                        buf['height'] = itemNode['dimensions']['height'] if 'height' in itemNode['dimensions'] else ''
-                        buf['width'] = itemNode['dimensions']['width'] if 'width' in itemNode['dimensions'] else ''
+                        # buf = {}
+                        buf = dict()
+                        item_node = item['node']
+                        item_text = item['node']['edge_media_to_caption']['edges']
+                        buf['date'] = item_node['taken_at_timestamp'] if 'taken_at_timestamp' in item_node else ''
+                        buf['code'] = item_node['shortcode'] if 'shortcode' in item_node else ''
+                        buf['caption'] = item_text['text'] if 'text' in item_text else ''
+                        buf['display_src'] = item_node['display_url'] if 'display_url' in item_node else ''
+                        buf['height'] = item_node['dimensions']['height'] if 'height' in item_node['dimensions'] else ''
+                        buf['width'] = item_node['dimensions']['width'] if 'width' in item_node['dimensions'] else ''
+                        index = 0
+                        for itemThumb in item_node['thumbnail_resources']:
+                            buf['thumb' + str(index)] = itemThumb['src']
+                            index += 1
                         str_res.append(buf)
                         count += 1
             else:
                 return json_str
         str_r = {'count': count, 'nodes': str_res}
-        #json_result = json.loads(json.dumps(str_r))
-        return self.imgForQml(str_r)
+        return self.img_for_qml(str_r)
 
-    #QML lite
-    def imgForQml(self, json_str):
+    # QML lite
+    @staticmethod
+    def img_for_qml(json_str):
         nodes = []
         for item in json_str['nodes']:
-            buf = {}
+            # buf = {}
+            buf = dict()
             buf['qurl'] = item['display_src']
+            buf['thumb320'] = item['thumb2']
             nodes.append(buf)
-        #return json.loads(json.dumps(nodes)) #.replace(u'<', u'\\u003c').replace(u'>', u'\\u003e').replace(u'&', u'\\u0026').replace(u"'", u'\\u0027')
-
         return json.dumps(nodes)
 
 if __name__ == '__main__':
     session = requests.Session()
     insta = Instagram(session)
     insta.auth_insta()
-    str = insta.search_pro("jmlmurad")
-    str2 = insta.next_search_pro("jmlmurad")
-    print(str)
-    print(str2)
+    stroke = insta.search_tag("apple")
+    # stroke2 = insta.next_search_pro("apple")
+    print(stroke)
+    # print(stroke2)

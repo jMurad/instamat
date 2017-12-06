@@ -61,9 +61,9 @@ ApplicationWindow {
             }
 
             model: ListModel {
-                ListElement { sourceName: "frame1"; }
-                ListElement { sourceName: "frame2"; }
-                ListElement { sourceName: "frame3"; }
+                ListElement { sourceName: frame1; }
+                ListElement { sourceName: frame2; }
+                ListElement { sourceName: frame3; }
             }
 
             //Прямоугольник с черной рамкой
