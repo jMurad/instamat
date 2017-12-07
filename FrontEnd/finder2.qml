@@ -6,16 +6,18 @@ Rectangle {
     anchors.fill: parent
     anchors.margins: 10
 
+    //Меню бар
     Rectangle {
         id: bar
 
-        width: parent.width*95/100
-        height: 35
         anchors.top: parent.top
         anchors.topMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width*95/100
+        height: 35
         border.width: 1
 
+        //Изображение ссылки "Назад"
         Image {
             id: find1
 
@@ -28,6 +30,7 @@ Rectangle {
             mipmap: true
         }
 
+        //Текст ссылки "Назад"
         Text {
             id: left_link
 
@@ -37,6 +40,7 @@ Rectangle {
             font.pixelSize: 15
             text: "Назад"
 
+            //Обработчик ссылки "Назад"
             MouseArea {
                 id: left_link_
 
@@ -57,6 +61,7 @@ Rectangle {
             }
         }
 
+        //Изображение ссылки "Новый поиск"
         Image {
             id: find2
 
@@ -69,6 +74,7 @@ Rectangle {
             mipmap: true
         }
 
+        //Текст ссылки "Новый поиск"
         Text {
             id: center_link
 
@@ -76,6 +82,7 @@ Rectangle {
             font.pixelSize: 15
             text: "Новый поиск"
 
+            //Обработчик ссылки "Новый поиск"
             MouseArea {
                 id: center_link_
 
@@ -97,27 +104,27 @@ Rectangle {
             }
         }
 
-     }
+    }
 
+    //Корневой ректангл для размешения элементов
     Rectangle{
         id: body
 
-        width: parent.width*95/100
         anchors.top: bar.bottom
         anchors.bottom: root2.bottom
         anchors.topMargin: 20
         anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width*95/100
         border.width: 0
 
-        property int counter: 0
-
+        //Обработчик инициализации страницы
         Component.onCompleted: {
             timer1.running = true
-            //body.counter = body.counter + 1
+        }
 
-        }   //Повторный поиск настроить завтра
-
+        //Таймер запускающий добавление элементов в модель (т.е. ссылок на изображения)
+        //каждые 300 мс проверяется поступили ли данные json, если да то фасуются в модель
         Timer {
             id: timer1
 
@@ -136,12 +143,12 @@ Rectangle {
             }
         }
 
-        //Model for GridView
+        //Модель для GridView
         ListModel {
             id: theModel
         }
 
-        //Grid for viewing images
+        //GridView для отображения изображений ввиде сетки
         GridView  {
             id: view
 
@@ -151,22 +158,23 @@ Rectangle {
             cellWidth: (parent.width)/4
             cellHeight: cellWidth
 
-
+            //Делегат для сетки (т.е. каждый элемент сетки в отдельности)
             delegate: Item {
 
                 width: view.cellWidth
                 height: width
 
+                //Ректангл в котором и будет распологаться изображение
                 Rectangle  {
                     id: greenBox
 
                     width: parent.width-8
                     height: parent.height-8
                     anchors.centerIn: parent
-
                     color: "white"
                     border.width: 1
 
+                    //Изображение для отображение в сетке
                     Image {
                         id: pic
 
@@ -174,6 +182,7 @@ Rectangle {
                         source: thumb
                     }
 
+                    //Обработчик нажатия на изображение
                     MouseArea {
                         anchors.fill: parent
 
@@ -183,6 +192,7 @@ Rectangle {
                         }
                     }
                     /*
+                    //Анимация при добавлении элемента в сетку
                     GridView.onAdd: SequentialAnimation {
                         NumberAnimation {
                             target: greenBox;

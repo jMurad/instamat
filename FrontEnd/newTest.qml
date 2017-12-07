@@ -29,6 +29,7 @@ ApplicationWindow {
         clip: true
     }
 
+    //Корневой ректангл
     Rectangle {
         id: rooted
 
@@ -47,12 +48,11 @@ ApplicationWindow {
             layoutDirection: Qt.LeftToRight
             orientation: ListView.Horizontal
             clip: true
+            spacing: 70
             interactive: false
             preferredHighlightBegin: 20
             preferredHighlightEnd: width - 20
             highlightRangeMode: ListView.StrictlyEnforceRange
-            spacing: 70
-
             highlightFollowsCurrentItem: true
             highlightMoveVelocity: 1200
 
@@ -62,11 +62,12 @@ ApplicationWindow {
                 }
             }
 
+            //Модели для скроллера
             model: ListModel {
                 id: rootModel
 
                 ListElement {sourceName: "finder.qml"}
-                ListElement {sourceName: "finder2.qml"}
+                //ListElement {sourceName: "finder2.qml"}
                 //ListElement {sourceName: "finder3.qml"}
             }
 
@@ -76,25 +77,24 @@ ApplicationWindow {
 
                 width: root.width - 40
                 height: root.height - 130
-
-
                 color:"#fff"
                 radius: 10
                 border.color: "#000000"
                 border.width: 2
 
+                //Загрузчик страниц для скроллера
                 Loader {
                     id: framer
-                    anchors.fill: parent
 
-                    //anchors.centerIn: blackLine
+                    anchors.fill: parent
                     source: sourceName
                 }
             }
         }
     }
 
-     Connections {
+    // получение данных с бэкЭнд`а
+    Connections {
         target: instamat
 
         onResultFind: {

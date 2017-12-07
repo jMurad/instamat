@@ -6,16 +6,18 @@ Rectangle{
     anchors.fill: parent
     anchors.margins: 10
 
+    //Сигнал бэкЭнд`у для выдачи данных
     signal nextFrame()
 
+    //Описание строки ввода
     Rectangle {
         id: labelText
 
-        width: 550
-        height: 35
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 50
+        width: 550
+        height: 35
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -24,26 +26,27 @@ Rectangle{
         }
     }
 
-    Rectangle{
+    //Строка ввода
+    Rectangle {
         id: inputText
 
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: 50
         anchors.rightMargin: 50
-        height: 100
         anchors.top: labelText.bottom
         anchors.topMargin: 15
+        height: 100
         border.width: 1
 
         TextInput {
             id: intxt
 
             anchors.fill: parent
+            anchors.margins: 7
             font.pixelSize: 60
             text: ""
             cursorVisible: true
-            anchors.margins: 7
 
             validator: RegExpValidator{
                 regExp: /^(@|#)\w*$/
@@ -51,24 +54,32 @@ Rectangle{
         }
     }
 
+    //Клавиатура
     Rectangle {
         id: keyBoard
 
         anchors.top: inputText.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 15
-
+        //Столбец (1 столбец)
         Column {
             anchors.fill: parent
             spacing: 3
+
+            //Повтор строк 4 раза (из модели)
             Repeater {
-                model: theModel
+                model: keyBoardModel
+
+                //Строка
                 Row {
-                    spacing: 3
                     anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 3
+
+                    //Повтор столбцов в строке N раз (N - из модели)
                     Repeater {
                         model: modelData
 
+                        //Клавиши
                         Rectangle {
                             width: ((root1.width-100-((11-1)*parent.parent.spacing))/11)*w
                             height: width * h
@@ -77,6 +88,7 @@ Rectangle{
                             border.width: 1
                             color: clr
 
+                            //Изображение на клавише
                             Image {
                                 id: backImg
                                 anchors.top: parent.top
@@ -90,6 +102,7 @@ Rectangle{
                                 mipmap: true
                             }
 
+                            //Текст на клавише
                             Text {
                                 id: textName
                                 anchors.centerIn: parent
@@ -97,19 +110,23 @@ Rectangle{
                                 font.pixelSize: 25
                             }
 
+                            //Обработчик нажатий на клавишу
                             MouseArea {
                                 id: button_mouse_area
 
                                 anchors.fill: parent
                                 hoverEnabled: true
+
                                 onEntered: {
                                     parent.border.color = "gray"
                                     parent.border.width = 4
                                 }
+
                                 onExited: {
                                     parent.border.color = "black"
                                     parent.border.width = 1
                                 }
+
                                 onClicked: {
                                     parent.border.color = "black"
                                     if((name != "<")&&(name != "(c)")&&(named != "next")) {
@@ -141,7 +158,7 @@ Rectangle{
                                             else
                                                 if(named == "next") {
                                                     instamat.first_find(intxt.text)
-                                                    //rootModel.append({"sourceName": "finder2.qml"})
+                                                    rootModel.append({"sourceName": "finder2.qml"})
                                                     lview.currentIndex = 1
                                                 }
                                 }
@@ -153,8 +170,10 @@ Rectangle{
         }
     }
 
+    //Модель для клавиатуры
     ListModel {
-        id: theModel
+        id: keyBoardModel
+
         ListElement {
             modelName: [
                 ListElement { name: "Q"; w: 1; h: 1},
