@@ -141,7 +141,7 @@ Rectangle{
                                             else
                                                 if(named == "next") {
                                                     instamat.first_find(intxt.text)
-                                                    rootModel.append({"sourceName": "finder2.qml"})
+                                                    //rootModel.append({"sourceName": "finder2.qml"})
                                                     lview.currentIndex = 1
                                                 }
                                 }

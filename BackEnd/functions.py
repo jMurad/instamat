@@ -200,10 +200,9 @@ class Instagram:
     def img_for_qml(json_str):
         nodes = []
         for item in json_str['nodes']:
-            # buf = {}
             buf = dict()
-            buf['qurl'] = item['display_src']
-            buf['thumb320'] = item['thumb2']
+            # buf['qurl'] = item['display_src']
+            buf['thumb'] = item['thumb2']
             nodes.append(buf)
         return json.dumps(nodes)
 

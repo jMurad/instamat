@@ -66,7 +66,7 @@ ApplicationWindow {
                 id: rootModel
 
                 ListElement {sourceName: "finder.qml"}
-                //ListElement {sourceName: "finder2.qml"}
+                ListElement {sourceName: "finder2.qml"}
                 //ListElement {sourceName: "finder3.qml"}
             }
 

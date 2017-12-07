@@ -114,13 +114,14 @@ Rectangle {
 
         Component.onCompleted: {
             timer1.running = true
-            body.counter = body.counter + 1
+            //body.counter = body.counter + 1
+
         }   //Повторный поиск настроить завтра
 
         Timer {
             id: timer1
 
-            interval: 1000; running: false; repeat: true
+            interval: 300; running: false; repeat: true
             onTriggered: {
                 var data = root.qResultFind;
                 if (data.indexOf("{") != -1 ){
@@ -164,7 +165,7 @@ Rectangle {
                     anchors.centerIn: parent
 
                     color: "white"
-                    //border.width: 1
+                    border.width: 1
 
                     Image {
                         id: pic
@@ -181,40 +182,7 @@ Rectangle {
                             lview.currentIndex = 2
                         }
                     }
-
-                    SequentialAnimation {
-                        id: seqAnim
-
-                        NumberAnimation {
-                            target: greenBox;
-                            property: "scale";
-                            from: 1.057;
-                            to: 1;
-                            duration: 700;
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-
-                    GridView.onRemove: SequentialAnimation {
-                        PropertyAction {
-                            target: greenBox;
-                            property: "GridView.delayRemove";
-                            value: true
-                        }
-                        NumberAnimation {
-                            target: greenBox;
-                            property: "scale";
-                            to: 0;
-                            duration: 250;
-                            easing.type: Easing.InOutQuad
-                        }
-                        PropertyAction {
-                            target: greenBox;
-                            property: "GridView.delayRemove";
-                            value: false
-                        }
-                    }
-
+                    /*
                     GridView.onAdd: SequentialAnimation {
                         NumberAnimation {
                             target: greenBox;
@@ -225,6 +193,7 @@ Rectangle {
                             easing.type: Easing.InOutQuad
                         }
                     }
+                    */
                 }
             }
         }
