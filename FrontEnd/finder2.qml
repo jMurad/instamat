@@ -158,9 +158,30 @@ Rectangle {
             cellWidth: (parent.width)/4
             cellHeight: cellWidth
 
+            //Нижний колонтитул, при появлении загружает изображения
+            footer: Item {
+                height: 40
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Rectangle {
+                    id: footerLine
+
+                    width: 40
+                    height: 20
+                    anchors.centerIn: parent
+                    border.width: 1
+                    //anchors.fill: parent
+                    color: "red"
+
+                    MouseArea {
+
+                    }
+                }
+            }
+
             //Делегат для сетки (т.е. каждый элемент сетки в отдельности)
             delegate: Item {
-
                 width: view.cellWidth
                 height: width
 
@@ -168,9 +189,9 @@ Rectangle {
                 Rectangle  {
                     id: greenBox
 
+                    anchors.centerIn: parent
                     width: parent.width-8
                     height: parent.height-8
-                    anchors.centerIn: parent
                     color: "white"
                     border.width: 1
 
@@ -191,19 +212,6 @@ Rectangle {
                             lview.currentIndex = 2
                         }
                     }
-                    /*
-                    //Анимация при добавлении элемента в сетку
-                    GridView.onAdd: SequentialAnimation {
-                        NumberAnimation {
-                            target: greenBox;
-                            property: "scale";
-                            from: 0;
-                            to: 1;
-                            duration: 250;
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                    */
                 }
             }
         }
